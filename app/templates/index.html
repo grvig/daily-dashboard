@@ -12,6 +12,14 @@
       <h2>Weather</h2>
       <p id="weather-content">Loading...</p>
     </div>
+    <div class="card" id="todo-card">
+      <h2>To-Do</h2>
+      <form id="todo-form">
+        <input type="text" id="todo-input" placeholder="New task..." required>
+        <button type="submit">Add</button>
+      </form>
+      <ul id="todo-list"></ul>
+    </div>
   </div>
 
   <script>
@@ -27,6 +35,62 @@
       .catch(() => {
         document.getElementById("weather-content").textContent = "Unable to load weather.";
       });
+
+    const todoList = document.getElementById("todo-list");
+    const todoForm = document.getElementById("todo-form");
+    const todoInput = document.getElementById("todo-input");
+
+    function renderTodos(todos) {
+      todoList.innerHTML = "";
+      todos.forEach((todo) => {
+        const li = document.createElement("li");
+        li.className = todo.done ? "done" : "";
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.checked = todo.done;
+        checkbox.addEventListener("change", () => toggleTodo(todo.id));
+
+        const span = document.createElement("span");
+        span.textContent = todo.title;
+
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "x";
+        deleteBtn.type = "button";
+        deleteBtn.addEventListener("click", () => deleteTodo(todo.id));
+
+        li.append(checkbox, span, deleteBtn);
+        todoList.appendChild(li);
+      });
+    }
+
+    function loadTodos() {
+      fetch("/api/todos")
+        .then((res) => res.json())
+        .then(renderTodos);
+    }
+
+    function toggleTodo(id) {
+      fetch(`/api/todos/${id}/toggle`, { method: "PATCH" }).then(loadTodos);
+    }
+
+    function deleteTodo(id) {
+      fetch(`/api/todos/${id}`, { method: "DELETE" }).then(loadTodos);
+    }
+
+    todoForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      fetch("/api/todos", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title: todoInput.value }),
+      }).then(() => {
+        todoInput.value = "";
+        loadTodos();
+      });
+    });
+
+    loadTodos();
   </script>
 </body>
 </html>
