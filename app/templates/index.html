@@ -20,6 +20,10 @@
       </form>
       <ul id="todo-list"></ul>
     </div>
+    <div class="card" id="github-card">
+      <h2>GitHub</h2>
+      <p id="github-content">Loading...</p>
+    </div>
   </div>
 
   <script>
@@ -91,6 +95,19 @@
     });
 
     loadTodos();
+
+    fetch("/api/github")
+      .then((res) => res.json())
+      .then((data) => {
+        document.getElementById("github-content").innerHTML = `
+          <strong>@${data.username}</strong><br>
+          ${data.public_repos} public repos, ${data.followers} followers<br>
+          Push streak: ${data.streak_days} day${data.streak_days === 1 ? "" : "s"}
+        `;
+      })
+      .catch(() => {
+        document.getElementById("github-content").textContent = "Unable to load GitHub stats.";
+      });
   </script>
 </body>
 </html>
