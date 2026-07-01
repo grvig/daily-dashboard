@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Daily Dashboard</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <h1>Daily Dashboard</h1>
+  <div class="cards">
+    <div class="card" id="weather-card">
+      <h2>Weather</h2>
+      <p id="weather-content">Loading...</p>
+    </div>
+  </div>
+
+  <script>
+    fetch("/api/weather")
+      .then((res) => res.json())
+      .then((data) => {
+        document.getElementById("weather-content").innerHTML = `
+          <strong>${data.city}${data.region ? ", " + data.region : ""}</strong><br>
+          ${data.temperature_f}&deg;F, ${data.condition}<br>
+          Wind: ${data.wind_speed_mph} mph
+        `;
+      })
+      .catch(() => {
+        document.getElementById("weather-content").textContent = "Unable to load weather.";
+      });
+  </script>
+</body>
+</html>

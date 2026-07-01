@@ -1,0 +1,30 @@
+body {
+  font-family: system-ui, sans-serif;
+  background: #f4f4f5;
+  color: #1a1a1a;
+  margin: 0;
+  padding: 2rem;
+}
+
+h1 {
+  margin-bottom: 1.5rem;
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  padding: 1rem 1.5rem;
+  min-width: 220px;
+}
+
+.card h2 {
+  margin-top: 0;
+  font-size: 1.1rem;
+}
