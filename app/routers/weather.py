@@ -5,7 +5,7 @@ from fastapi import APIRouter
 
 router = APIRouter(prefix="/api/weather", tags=["weather"])
 
-DEFAULT_CITY = os.environ.get("DASHBOARD_CITY", "New York")
+DEFAULT_CITY = os.environ.get("DASHBOARD_CITY", "Chennai")
 
 WEATHER_CODES = {
     0: "Clear sky",
@@ -54,7 +54,6 @@ async def get_weather(city: str = DEFAULT_CITY):
                 "latitude": location["latitude"],
                 "longitude": location["longitude"],
                 "current": "temperature_2m,weather_code,wind_speed_10m",
-                "temperature_unit": "fahrenheit",
                 "timezone": "auto",
             },
         )
@@ -64,7 +63,7 @@ async def get_weather(city: str = DEFAULT_CITY):
     return {
         "city": location.get("name", city),
         "region": location.get("admin1"),
-        "temperature_f": current["temperature_2m"],
-        "wind_speed_mph": current["wind_speed_10m"],
+        "temperature_c": current["temperature_2m"],
+        "wind_speed_kmh": current["wind_speed_10m"],
         "condition": WEATHER_CODES.get(current["weather_code"], "Unknown"),
     }

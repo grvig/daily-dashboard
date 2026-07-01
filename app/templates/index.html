@@ -20,8 +20,8 @@
       .then((data) => {
         document.getElementById("weather-content").innerHTML = `
           <strong>${data.city}${data.region ? ", " + data.region : ""}</strong><br>
-          ${data.temperature_f}&deg;F, ${data.condition}<br>
-          Wind: ${data.wind_speed_mph} mph
+          ${data.temperature_c}&deg;C, ${data.condition}<br>
+          Wind: ${data.wind_speed_kmh} km/h
         `;
       })
       .catch(() => {
