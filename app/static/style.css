@@ -101,3 +101,30 @@ h1 {
   font-size: 0.85rem;
   color: #555;
 }
+
+#prices-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#prices-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.35rem 0;
+}
+
+.coin-name {
+  flex: 1;
+  text-transform: capitalize;
+  font-weight: 600;
+}
+
+.coin-change.up {
+  color: #16a34a;
+}
+
+.coin-change.down {
+  color: #dc2626;
+}

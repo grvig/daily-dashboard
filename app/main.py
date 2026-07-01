@@ -4,7 +4,7 @@ from fastapi.templating import Jinja2Templates
 
 from app import models  # noqa: F401 (registers tables with Base.metadata)
 from app.database import Base, engine
-from app.routers import github, news, todos, weather
+from app.routers import github, news, prices, todos, weather
 
 Base.metadata.create_all(bind=engine)
 
@@ -14,6 +14,7 @@ app.include_router(weather.router)
 app.include_router(todos.router)
 app.include_router(github.router)
 app.include_router(news.router)
+app.include_router(prices.router)
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
 templates = Jinja2Templates(directory="app/templates")

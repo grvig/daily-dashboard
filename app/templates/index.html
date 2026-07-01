@@ -28,6 +28,10 @@
       <h2>News</h2>
       <ul id="news-list"><li>Loading...</li></ul>
     </div>
+    <div class="card" id="prices-card">
+      <h2>Prices</h2>
+      <ul id="prices-list"><li>Loading...</li></ul>
+    </div>
   </div>
 
   <script>
@@ -136,6 +140,26 @@
       })
       .catch(() => {
         document.getElementById("news-list").innerHTML = "<li>Unable to load news.</li>";
+      });
+
+    fetch("/api/prices")
+      .then((res) => res.json())
+      .then((coins) => {
+        const pricesList = document.getElementById("prices-list");
+        pricesList.innerHTML = "";
+        coins.forEach((coin) => {
+          const li = document.createElement("li");
+          const up = coin.change_24h_pct >= 0;
+          li.innerHTML = `
+            <span class="coin-name">${coin.id}</span>
+            <span class="coin-price">$${coin.price_usd.toLocaleString()}</span>
+            <span class="coin-change ${up ? "up" : "down"}">${up ? "+" : ""}${coin.change_24h_pct}%</span>
+          `;
+          pricesList.appendChild(li);
+        });
+      })
+      .catch(() => {
+        document.getElementById("prices-list").innerHTML = "<li>Unable to load prices.</li>";
       });
   </script>
 </body>
