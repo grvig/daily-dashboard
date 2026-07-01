@@ -24,15 +24,6 @@
       <h2>GitHub</h2>
       <p id="github-content">Loading...</p>
     </div>
-    <div class="card" id="mood-card">
-      <h2>Mood</h2>
-      <form id="mood-form">
-        <div id="mood-scores"></div>
-        <input type="text" id="mood-note" placeholder="Note (optional)">
-        <button type="submit">Log</button>
-      </form>
-      <ul id="mood-list"></ul>
-    </div>
   </div>
 
   <script>
@@ -117,55 +108,6 @@
       .catch(() => {
         document.getElementById("github-content").textContent = "Unable to load GitHub stats.";
       });
-
-    const MOOD_EMOJI = { 1: "😞", 2: "🙁", 3: "😐", 4: "🙂", 5: "😄" };
-    let selectedMoodScore = 3;
-
-    const moodScoresEl = document.getElementById("mood-scores");
-    Object.entries(MOOD_EMOJI).forEach(([score, emoji]) => {
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.textContent = emoji;
-      btn.className = Number(score) === selectedMoodScore ? "selected" : "";
-      btn.addEventListener("click", () => {
-        selectedMoodScore = Number(score);
-        [...moodScoresEl.children].forEach((c) => c.classList.remove("selected"));
-        btn.classList.add("selected");
-      });
-      moodScoresEl.appendChild(btn);
-    });
-
-    function renderMoods(moods) {
-      const moodList = document.getElementById("mood-list");
-      moodList.innerHTML = "";
-      moods.forEach((mood) => {
-        const li = document.createElement("li");
-        const date = new Date(mood.created_at).toLocaleDateString();
-        li.textContent = `${MOOD_EMOJI[mood.score]} ${date}${mood.note ? " — " + mood.note : ""}`;
-        moodList.appendChild(li);
-      });
-    }
-
-    function loadMoods() {
-      fetch("/api/mood")
-        .then((res) => res.json())
-        .then(renderMoods);
-    }
-
-    document.getElementById("mood-form").addEventListener("submit", (e) => {
-      e.preventDefault();
-      const noteInput = document.getElementById("mood-note");
-      fetch("/api/mood", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ score: selectedMoodScore, note: noteInput.value || null }),
-      }).then(() => {
-        noteInput.value = "";
-        loadMoods();
-      });
-    });
-
-    loadMoods();
   </script>
 </body>
 </html>
