@@ -32,6 +32,16 @@
       <h2>Prices</h2>
       <ul id="prices-list"><li>Loading...</li></ul>
     </div>
+    <div class="card" id="expenses-card">
+      <h2>Expenses</h2>
+      <p id="expenses-total">Loading...</p>
+      <form id="expense-form">
+        <input type="number" id="expense-amount" placeholder="Amount" step="0.01" min="0" required>
+        <input type="text" id="expense-category" placeholder="Category" required>
+        <button type="submit">Add</button>
+      </form>
+      <ul id="expenses-list"></ul>
+    </div>
   </div>
 
   <script>
@@ -161,6 +171,51 @@
       .catch(() => {
         document.getElementById("prices-list").innerHTML = "<li>Unable to load prices.</li>";
       });
+
+    function loadExpenseSummary() {
+      fetch("/api/expenses/summary")
+        .then((res) => res.json())
+        .then((data) => {
+          document.getElementById("expenses-total").textContent =
+            `This month: $${data.month_total.toFixed(2)}`;
+        });
+    }
+
+    function loadExpenses() {
+      fetch("/api/expenses")
+        .then((res) => res.json())
+        .then((expenses) => {
+          const list = document.getElementById("expenses-list");
+          list.innerHTML = "";
+          expenses.forEach((expense) => {
+            const li = document.createElement("li");
+            const date = new Date(expense.created_at).toLocaleDateString();
+            li.textContent = `$${expense.amount.toFixed(2)} — ${expense.category} (${date})`;
+            list.appendChild(li);
+          });
+        });
+      loadExpenseSummary();
+    }
+
+    document.getElementById("expense-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const amountInput = document.getElementById("expense-amount");
+      const categoryInput = document.getElementById("expense-category");
+      fetch("/api/expenses", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          amount: parseFloat(amountInput.value),
+          category: categoryInput.value,
+        }),
+      }).then(() => {
+        amountInput.value = "";
+        categoryInput.value = "";
+        loadExpenses();
+      });
+    });
+
+    loadExpenses();
   </script>
 </body>
 </html>

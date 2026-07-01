@@ -128,3 +128,39 @@ h1 {
 .coin-change.down {
   color: #dc2626;
 }
+
+#expenses-card {
+  min-width: 260px;
+}
+
+#expenses-total {
+  font-weight: 600;
+  margin: 0 0 0.75rem;
+}
+
+#expense-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+#expense-amount {
+  width: 5rem;
+  padding: 0.3rem 0.5rem;
+}
+
+#expense-category {
+  flex: 1;
+  padding: 0.3rem 0.5rem;
+}
+
+#expenses-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 0.9rem;
+}
+
+#expenses-list li {
+  padding: 0.2rem 0;
+}
