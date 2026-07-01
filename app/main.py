@@ -2,7 +2,11 @@ from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
+from app import models  # noqa: F401 (registers tables with Base.metadata)
+from app.database import Base, engine
 from app.routers import weather
+
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Daily Dashboard")
 
