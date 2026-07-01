@@ -24,6 +24,10 @@
       <h2>GitHub</h2>
       <p id="github-content">Loading...</p>
     </div>
+    <div class="card" id="news-card">
+      <h2>News</h2>
+      <ul id="news-list"><li>Loading...</li></ul>
+    </div>
   </div>
 
   <script>
@@ -107,6 +111,31 @@
       })
       .catch(() => {
         document.getElementById("github-content").textContent = "Unable to load GitHub stats.";
+      });
+
+    fetch("/api/news")
+      .then((res) => res.json())
+      .then((snippets) => {
+        const newsList = document.getElementById("news-list");
+        newsList.innerHTML = "";
+        snippets.forEach((snippet) => {
+          const li = document.createElement("li");
+
+          const link = document.createElement("a");
+          link.href = snippet.link;
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+          link.textContent = snippet.title;
+
+          const summary = document.createElement("p");
+          summary.textContent = snippet.summary;
+
+          li.append(link, summary);
+          newsList.appendChild(li);
+        });
+      })
+      .catch(() => {
+        document.getElementById("news-list").innerHTML = "<li>Unable to load news.</li>";
       });
   </script>
 </body>
